@@ -6,26 +6,54 @@ namespace Streams
     {
         public static string ReadAllStreamContent(StreamReader streamReader)
         {
-            // TODO #4-1. Implement the method by reading all content as a string.
-            throw new NotImplementedException();
+            return streamReader.ReadToEnd();
         }
 
         public static string[] ReadLineByLine(StreamReader streamReader)
         {
-            // TODO #4-2. Implement the method by reading lines of characters as a string array.
-            throw new NotImplementedException();
+            List<string> lines = new List<string>();
+#pragma warning disable CS8600 // Преобразование литерала, допускающего значение NULL или возможного значения NULL в тип, не допускающий значение NULL.
+            string temp = streamReader.ReadLine();
+            while (temp != null)
+            {
+                lines.Add(temp);
+                temp = streamReader.ReadLine();
+            }
+
+            return lines.ToArray();
         }
 
         public static StringBuilder ReadOnlyLettersAndNumbers(StreamReader streamReader)
         {
-            // TODO #4-3. Implement the method by reading only letters and numbers, and write the characters to a StringBuilder.
-            throw new NotImplementedException();
+            string temp = string.Empty;
+            while (streamReader.Peek() != -1 && streamReader.Peek() != ' ' && streamReader.Peek() != ':' && streamReader.Peek() != '"' && streamReader.Peek() != ',' && streamReader.Peek() != '-')
+            {
+                temp = new string(temp + (char)streamReader.Read());
+            }
+
+            return new StringBuilder(temp);
         }
 
         public static char[][] ReadAsCharArrays(StreamReader streamReader, int arraySize)
         {
-            // TODO #4-4. Implement the method by returning an underlying string that sliced into jagged array of characters according to arraySize.
-            throw new NotImplementedException();
+            List<char[]> chars = new List<char[]>();
+            List<char> charsTemp = new List<char>();
+            while (streamReader.Peek() != -1)
+            {
+                charsTemp.Add((char)streamReader.Read());
+                if (charsTemp.Count == arraySize)
+                {
+                    chars.Add(charsTemp.ToArray());
+                    charsTemp = new List<char>();
+                }
+            }
+
+            if (charsTemp.Count > 0)
+            {
+                chars.Add(charsTemp.ToArray());
+            }
+
+            return chars.ToArray();
         }
     }
 }
